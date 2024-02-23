@@ -1,6 +1,7 @@
-usage: practice [-h] [-r] [--random] [-s] [--single]
+usage: practice [-h] [-r] [--random] [-s] [--single] [-c] [--clear]
 
 optional arguments:
     -h              show this help message and exit
     -r --random     run in random selection mode
     -s --single     run in single stratagem mode
+    -c --clear      deletes the saved player data and exits

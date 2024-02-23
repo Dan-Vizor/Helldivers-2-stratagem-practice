@@ -42,8 +42,8 @@ def UpdatePlayerData(stratagem:dict, CompletionTime=None, TimesPassed=None, Time
     with open("PlayerData.json", "w") as f: f.write(json.dumps(PlayerData, indent=2))
 
 def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
-    if JustArrows: OutputText = f"\033[1m"
-    else: OutputText = f"{stratagem['name']}: \033[1m"
+    if JustArrows: OutputText = f"\033[1m["
+    else: OutputText = f"{stratagem['name']}: \033[1m["
 
     i = 0
     for character in stratagem['code']:
@@ -53,7 +53,7 @@ def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
 
         i += 1
 
-    OutputText += "\033[0m"
+    OutputText += "]\033[0m"
     return OutputText
 
 def main():
@@ -68,10 +68,17 @@ def main():
     # identify which mode to use
     if "-r" in CommandArgs or "--random" in CommandArgs: mode = "random"
     elif "-s" in CommandArgs or "--single" in CommandArgs: mode = "single"
+    elif "-c" in CommandArgs or "--clear" in CommandArgs:
+        os.remove("PlayerData.json")
+        print("player data has been reset")
+        raise SystemExit
     else:
         print("no mode provided\n")
         print(open("help-text.txt", "r").read())
         raise SystemExit
+
+    print("starting soon...", end="\r")
+    time.sleep(1)
 
     # main loop
     CodeIndex = 0
@@ -99,9 +106,9 @@ def main():
             SelectNew = False
 
         else:
-            if CodeIndex == len(stratagem['code']):
+            if CodeIndex >= len(stratagem['code']):
                 print(f"{' '*100}\r {colored(stratagem['name'], 'green')}: {MakeCodeOutput(stratagem, 0, JustArrows=True)}")
-                UpdatePlayerData(stratagem, CompletionTime=TimeRemaining, TimesPassed=1)
+                UpdatePlayerData(stratagem, CompletionTime=TimeTaken, TimesPassed=1)
 
                 # reset
                 CodeIndex = 0
@@ -109,20 +116,11 @@ def main():
                 time.sleep(0.5)
                 continue
 
-        # fail if time is up
-        TimeRemaining = SETTINGS['timer'] - (time.time() - StartTime)
-        if TimeRemaining <= 0:
-            print(f"{' '*100}\r {colored(stratagem['name'], 'red')}: {MakeCodeOutput(stratagem, 0, JustArrows=True)}")
-            UpdatePlayerData(stratagem, TimesFailed=1)
-
-            # reset
-            CodeIndex = 0
-            SelectNew = True
-            time.sleep(0.6)
-            continue
+        # calculate how long it's been
+        TimeTaken = (time.time() - StartTime)
 
         # print code to user
-        print(f"{' '*100}\r {MakeCodeOutput(stratagem, CodeIndex)} {round(TimeRemaining, 2)}", end="\r")
+        print(f"{' '*100}\r {MakeCodeOutput(stratagem, CodeIndex)} {round(TimeTaken, 2)}", end="\r")
 
         # check if any keys are being pressed
         CorrectKey = SETTINGS['keybinds'][stratagem['code'][CodeIndex]]
@@ -134,8 +132,11 @@ def main():
                 CodeIndex = 0
                 time.sleep(0.5)
 
-            # wait until key is released
-            while AnyValidInput(): pass
+            # wait until key is released (will allow the next correct key to be pressed)
+            while AnyValidInput():
+                if CodeIndex < len(stratagem['code']) -1:
+                    if keyboard.is_pressed(SETTINGS['keybinds'][stratagem['code'][CodeIndex +1]]):
+                        CodeIndex + 1
 
         else:
             continue

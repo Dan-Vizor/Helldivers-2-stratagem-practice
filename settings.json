@@ -4,6 +4,5 @@
         "down": "s",
         "left": "a",
         "right": "d"
-    },
-    "timer": 6
+    }
 }
