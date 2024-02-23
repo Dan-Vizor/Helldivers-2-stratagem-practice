@@ -19,7 +19,7 @@ $ sudo python3 -m pip install -r requirements.txt
 ```
 
 ### Windows
-Install WSL (Windows Subsystem for Linux) using [this guide](https://learn.microsoft.com/en-us/windows/wsl/install) and then follow the Linux install steps inside WSL.
+Install WSL (Windows Subsystem for Linux) using [this guide](https://learn.microsoft.com/en-us/windows/wsl/install). There will then be an app called 'Ubuntu', open it and then follow the Linux install steps inside WSL.
 
 ### MacOS
 Follow [this guide](https://macpaw.com/how-to/install-python-mac) to install Python and then follow the Linux install steps.
