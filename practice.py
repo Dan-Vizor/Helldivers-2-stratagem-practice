@@ -3,7 +3,7 @@ import os
 import sys
 import json
 import time
-import readchar
+import keyboard
 import random
 from termcolor import colored
 
@@ -11,8 +11,7 @@ def ConvertToArrow(direction):
     return DATA['arrows'][direction]
 
 def AnyValidInput():
-    if readchar.readkey() in ["w", "a", "s", "d"]: return True
-    else: return False
+    return keyboard.is_pressed(SETTINGS['keybinds']['up']) or keyboard.is_pressed(SETTINGS['keybinds']['down']) or keyboard.is_pressed(SETTINGS['keybinds']['left']) or keyboard.is_pressed(SETTINGS['keybinds']['right'])
 
 def UpdatePlayerData(stratagem:dict, CompletionTime=None, TimesPassed=None, TimesFailed=None):
     PlayerData = json.loads(open("PlayerData.json", "r").read())
@@ -127,13 +126,13 @@ def main():
         # check if any keys are being pressed
         CorrectKey = SETTINGS['keybinds'][stratagem['code'][CodeIndex]]
         if AnyValidInput():
-            if CorrectKey == readchar.readkey():
+            if keyboard.is_pressed(CorrectKey):
                 CodeIndex += 1
 
                 # wait until key is released (will allow the next correct key to be pressed if setting is enabled)
                 while AnyValidInput():
                     if CodeIndex < (len(stratagem['code']) -1) and SETTINGS['AllowMultipleInputs']:
-                        if readchar.readkey() == SETTINGS['keybinds'][stratagem['code'][CodeIndex +1]]:
+                        if keyboard.is_pressed(SETTINGS['keybinds'][stratagem['code'][CodeIndex +1]]):
                             CodeIndex + 1
 
             else: 
