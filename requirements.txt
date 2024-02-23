@@ -1,2 +1,2 @@
-keyboard>=0.13.5
+readchar>=4.0.5
 termcolor>=2.3.0
