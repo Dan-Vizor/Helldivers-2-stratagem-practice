@@ -1,0 +1,6 @@
+usage: practice [-h] [-r] [--random] [-s] [--single]
+
+optional arguments:
+    -h              show this help message and exit
+    -r --random     run in random selection mode
+    -s --single     run in single stratagem mode
