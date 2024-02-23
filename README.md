@@ -12,7 +12,7 @@
 $ git clone https://github.com/Dan-Vizor/Helldivers-2-stratagem-practice.git
 
 # change the working directory to stratagem practice
-$ cd helldivers-stratagem-practice
+$ cd Helldivers-2-stratagem-practice
 
 # install the requirements
 $ sudo python3 -m pip install -r requirements.txt
