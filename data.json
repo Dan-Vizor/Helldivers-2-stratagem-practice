@@ -5,6 +5,7 @@
         "left": "←",
         "right": "→"
     },
+    "NamesSpacingsize": 20,
     "stratagems": [
         {
             "name": "Machine Gun",

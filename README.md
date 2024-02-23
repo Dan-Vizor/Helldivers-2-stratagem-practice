@@ -40,5 +40,7 @@ python3 stats.py
 ```
 This program uses the default PC keybinds for stratagems. You can set alternate keybinds by editing the **settings.json** file.
 
+To exit the game press CTRL+C
+
 ## Note
 Currently requires root access to run due to using the 'keyboard' Python module. Will be fixed in a future update.

@@ -42,8 +42,8 @@ def UpdatePlayerData(stratagem:dict, CompletionTime=None, TimesPassed=None, Time
     with open("PlayerData.json", "w") as f: f.write(json.dumps(PlayerData, indent=2))
 
 def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
-    if JustArrows: OutputText = f"\033[1m["
-    else: OutputText = f"{stratagem['name']}: \033[1m["
+    if JustArrows: OutputText = f"{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}\033[1m["
+    else: OutputText = f"{stratagem['name']}:{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}\033[1m["
 
     i = 0
     for character in stratagem['code']:
@@ -77,8 +77,9 @@ def main():
         print(open("help-text.txt", "r").read())
         raise SystemExit
 
-    print("starting soon...", end="\r")
-    time.sleep(1)
+    for i in range(SETTINGS['GameStartTimer']):
+        print(f"starting in {SETTINGS['GameStartTimer'] - i} seconds.{'.'*i}", end="\r")
+        time.sleep(1)
 
     # main loop
     CodeIndex = 0
@@ -95,7 +96,7 @@ def main():
             elif mode == "single":
                 found = False
                 for each in DATA['stratagems']:
-                    if each['name'] == CommandArgs[-1]:
+                    if CommandArgs[-1].lower() in each['name'].lower():
                         stratagem = each
                         found = True
                         break
@@ -107,7 +108,7 @@ def main():
 
         else:
             if CodeIndex >= len(stratagem['code']):
-                print(f"{' '*100}\r {colored(stratagem['name'], 'green')}: {MakeCodeOutput(stratagem, 0, JustArrows=True)}")
+                print(f"{' '*100}\r {colored(stratagem['name'], 'green')}:{MakeCodeOutput(stratagem, 0, JustArrows=True)}")
                 UpdatePlayerData(stratagem, CompletionTime=TimeTaken, TimesPassed=1)
 
                 # reset
@@ -125,18 +126,20 @@ def main():
         # check if any keys are being pressed
         CorrectKey = SETTINGS['keybinds'][stratagem['code'][CodeIndex]]
         if AnyValidInput():
-            if keyboard.is_pressed(CorrectKey): CodeIndex += 1
+            if keyboard.is_pressed(CorrectKey):
+                CodeIndex += 1
+
+                # wait until key is released (will allow the next correct key to be pressed if setting is enabled)
+                while AnyValidInput():
+                    if CodeIndex < (len(stratagem['code']) -1) and SETTINGS['AllowMultipleInputs']:
+                        if keyboard.is_pressed(SETTINGS['keybinds'][stratagem['code'][CodeIndex +1]]):
+                            CodeIndex + 1
+
             else: 
-                print(f"{' '*100}\r {stratagem['name']}: {colored(MakeCodeOutput(stratagem, 0, JustArrows=True), 'red')}", end="\r")
+                print(f"{' '*100}\r {stratagem['name']}:{colored(MakeCodeOutput(stratagem, 0, JustArrows=True), 'red')}", end="\r")
                 UpdatePlayerData(stratagem, TimesFailed=1)
                 CodeIndex = 0
                 time.sleep(0.5)
-
-            # wait until key is released (will allow the next correct key to be pressed)
-            while AnyValidInput():
-                if CodeIndex < len(stratagem['code']) -1:
-                    if keyboard.is_pressed(SETTINGS['keybinds'][stratagem['code'][CodeIndex +1]]):
-                        CodeIndex + 1
 
         else:
             continue
@@ -157,4 +160,4 @@ try:
     main()
 
 except KeyboardInterrupt:
-    print("\n\nThank you for playing!")
+    print("\n\nThank you for playing!\nTo see your stats run 'python3 stats.py'")

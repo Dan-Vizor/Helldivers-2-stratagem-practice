@@ -4,5 +4,7 @@
         "down": "s",
         "left": "a",
         "right": "d"
-    }
+    },
+    "AllowMultipleInputs": true,
+    "GameStartTimer": 5
 }
