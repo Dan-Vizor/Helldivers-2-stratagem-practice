@@ -1,12 +1,12 @@
 # Helldivers 2 Stratagem Practice
-"Ok, listen up Helldivers. While you're all in cryo we'll plug you into this practice program to help you master your stratagems. I expect you all to be masters of calling in Hellbombs once we thaw you out" - General Brasch
+"Ok, listen up Helldivers! While you're all in cryo we'll plug you into this practice program to help you master your stratagems. I expect you all to be masters of calling in Hellbombs once we thaw you out!" - General Brasch
 
 *Notice: failure to achieve at least 80% accuracy will result in you being ejected from the Super Destroyer.*
 
 ![stratagem image](https://github.com/Dan-Vizor/helldivers-stratagem-practice/blob/master/Stratagems.png)
 
 ## Installation
-### linux
+### Linux
 ```console
 # clone the repo
 $ git clone https://github.com/Dan-Vizor/helldivers-stratagem-practice.git
