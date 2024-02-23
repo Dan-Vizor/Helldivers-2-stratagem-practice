@@ -13,6 +13,34 @@ def ConvertToArrow(direction):
 def AnyValidInput():
     return keyboard.is_pressed(SETTINGS['keybinds']['up']) or keyboard.is_pressed(SETTINGS['keybinds']['down']) or keyboard.is_pressed(SETTINGS['keybinds']['left']) or keyboard.is_pressed(SETTINGS['keybinds']['right'])
 
+def UpdatePlayerData(stratagem:dict, CompletionTime=None, TimesPassed=None, TimesFailed=None):
+    PlayerData = json.loads(open("PlayerData.json", "r").read())
+    
+    i = 0
+    Found = False
+    for each in PlayerData['stratagems']:
+        if each['name'] == stratagem['name']:
+            CurrentData = each
+            Found = True
+            break
+
+    if not Found:
+        CurrentData = {
+            "name": stratagem['name'],
+            "TimesPassed": 0,
+            "TimesFailed": 0,
+            "Times": []
+        }
+
+    if CompletionTime != None: CurrentData['Times'].append(CompletionTime)
+    if TimesPassed != None: CurrentData['TimesPassed'] += 1
+    if TimesFailed != None: CurrentData['TimesFailed'] += 1
+
+    # add the modified date back to the file
+    if Found: PlayerData['stratagems'][i] = CurrentData
+    else: PlayerData['stratagems'].append(CurrentData)
+    with open("PlayerData.json", "w") as f: f.write(json.dumps(PlayerData, indent=2))
+
 def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
     if JustArrows: OutputText = f"\033[1m"
     else: OutputText = f"{stratagem['name']}: \033[1m"
@@ -28,13 +56,89 @@ def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
     OutputText += "\033[0m"
     return OutputText
 
-os.system('clear')
-CommandArgs = sys.argv[1:]
+def main():
+    os.system('clear')
+    CommandArgs = sys.argv[1:]
 
-# print help menu and exit
-if "-h" in CommandArgs:
-    print(open("help-text.txt", "r").read())
-    raise SystemExit
+    # print help menu and exit
+    if "-h" in CommandArgs:
+        print(open("help-text.txt", "r").read())
+        raise SystemExit
+
+    # identify which mode to use
+    if "-r" in CommandArgs or "--random" in CommandArgs: mode = "random"
+    elif "-s" in CommandArgs or "--single" in CommandArgs: mode = "single"
+    else:
+        print("no mode provided\n")
+        print(open("help-text.txt", "r").read())
+        raise SystemExit
+
+    # main loop
+    CodeIndex = 0
+    SelectNew = True
+    while True:
+
+        # load stratagem
+        if SelectNew:
+            StartTime = time.time()
+
+            if mode == "random":
+                stratagem = random.choice(DATA['stratagems'])
+
+            elif mode == "single":
+                found = False
+                for each in DATA['stratagems']:
+                    if each['name'] == CommandArgs[-1]:
+                        stratagem = each
+                        found = True
+                        break
+
+                if not found:
+                    print(f"Error: unknown stratagem name '{CommandArgs[-1]}'")
+
+            SelectNew = False
+
+        else:
+            if CodeIndex == len(stratagem['code']):
+                print(f"{' '*100}\r {colored(stratagem['name'], 'green')}: {MakeCodeOutput(stratagem, 0, JustArrows=True)}")
+                UpdatePlayerData(stratagem, CompletionTime=TimeRemaining, TimesPassed=1)
+
+                # reset
+                CodeIndex = 0
+                SelectNew = True
+                time.sleep(0.5)
+                continue
+
+        # fail if time is up
+        TimeRemaining = SETTINGS['timer'] - (time.time() - StartTime)
+        if TimeRemaining <= 0:
+            print(f"{' '*100}\r {colored(stratagem['name'], 'red')}: {MakeCodeOutput(stratagem, 0, JustArrows=True)}")
+            UpdatePlayerData(stratagem, TimesFailed=1)
+
+            # reset
+            CodeIndex = 0
+            SelectNew = True
+            time.sleep(0.6)
+            continue
+
+        # print code to user
+        print(f"{' '*100}\r {MakeCodeOutput(stratagem, CodeIndex)} {round(TimeRemaining, 2)}", end="\r")
+
+        # check if any keys are being pressed
+        CorrectKey = SETTINGS['keybinds'][stratagem['code'][CodeIndex]]
+        if AnyValidInput():
+            if keyboard.is_pressed(CorrectKey): CodeIndex += 1
+            else: 
+                print(f"{' '*100}\r {stratagem['name']}: {colored(MakeCodeOutput(stratagem, 0, JustArrows=True), 'red')}", end="\r")
+                UpdatePlayerData(stratagem, TimesFailed=1)
+                CodeIndex = 0
+                time.sleep(0.5)
+
+            # wait until key is released
+            while AnyValidInput(): pass
+
+        else:
+            continue
 
 # load json files
 try:
@@ -45,73 +149,11 @@ except Exception as e:
     print(f"Error: failed to load json files:\n{e}")
     raise SystemExit
 
-# identify which mode to use
-if "-r" in CommandArgs or "--random" in CommandArgs: mode = "random"
-elif "-s" in CommandArgs or "--single" in CommandArgs: mode = "single"
-else:
-    print("no mode provided\n")
-    print(open("help-text.txt", "r").read())
-    raise SystemExit
+if not os.path.exists("PlayerData.json"):
+    with open("PlayerData.json", "w") as f: f.write(json.dumps({"stratagems": []}, indent=2))
 
-# main loop
-CodeIndex = 0
-SelectNew = True
-while True:
+try:
+    main()
 
-    # load stratagem
-    if SelectNew:
-        StartTime = time.time()
-
-        if mode == "random":
-            stratagem = random.choice(DATA['stratagems'])
-
-        elif mode == "single":
-            found = False
-            for each in DATA['stratagems']:
-                if each['name'] == CommandArgs[-1]:
-                    stratagem = each
-                    found = True
-                    break
-
-            if not found:
-                print(f"Error: unknown stratagem name '{CommandArgs[-1]}'")
-
-        SelectNew = False
-
-    else:
-        if CodeIndex == len(stratagem['code']):
-            print(f"{' '*100}\r {colored(stratagem['name'], 'green')}: {MakeCodeOutput(stratagem, 0, JustArrows=True)}")
-            
-            # reset
-            CodeIndex = 0
-            SelectNew = True
-            time.sleep(1)
-            continue
-
-    # fail if time is up
-    TimeRemaining = SETTINGS['timer'] - (time.time() - StartTime)
-    if TimeRemaining <= 0:
-        print(f"{' '*100}\r {colored(stratagem['name'], 'red')}: {MakeCodeOutput(stratagem, 0, JustArrows=True)}")
-            
-        # reset
-        CodeIndex = 0
-        SelectNew = True
-        time.sleep(1)
-        continue
-
-    # print code to user
-    print(f"{' '*100}\r {MakeCodeOutput(stratagem, CodeIndex)} {round(TimeRemaining, 2)}", end="\r")
-
-    # check if any keys are being pressed
-    CorrectKey = SETTINGS['keybinds'][stratagem['code'][CodeIndex]]
-    if AnyValidInput():
-        if keyboard.is_pressed(CorrectKey): CodeIndex += 1
-        else: CodeIndex = 0
-
-        # wait until key is released
-        while AnyValidInput(): pass
-
-    else:
-        continue
-
-print()
+except KeyboardInterrupt:
+    print("\n\nThank you for playing!")
