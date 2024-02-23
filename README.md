@@ -1,10 +1,12 @@
-# helldivers-stratagem-practice
-A practice program for Helldivers 2 stratagem codes.
+# Helldivers 2 Stratagem Practice
+"Ok, listen up Helldivers. While you're all in cryo we'll plug you into this practice program to help you master your stratagems. I expect you all to be masters of calling in Hellbombs once we thaw you out" - General Brasch
+
+*Notice: failure to achieve at least 80% accuracy will result in you being ejected from the Super Destroyer.*
 
 ![stratagem image](https://github.com/Dan-Vizor/helldivers-stratagem-practice/blob/master/Stratagems.png)
 
 ## Installation
-
+### linux
 ```console
 # clone the repo
 $ git clone https://github.com/Dan-Vizor/helldivers-stratagem-practice.git
@@ -16,14 +18,26 @@ $ cd helldivers-stratagem-practice
 $ sudo python3 -m pip install -r requirements.txt
 ```
 
+### Windows
+Install WSL (Windows Subsystem for Linux) using [this guide](https://learn.microsoft.com/en-us/windows/wsl/install) and then follow the Linux install steps inside WSL.
+
+### MacOS
+Follow [this guide](https://macpaw.com/how-to/install-python-mac) to install Python and then follow the Linux install steps.
+
 ## Usage
 ```console
 # random mode
-sudo ./practice.py -r
+sudo python3 practice.py -r
 
 # single stratagem mode
-sudo ./practice.py -s "Hellbomb"
+sudo python3 practice.py -s "Hellbomb"
+
+# reset stats
+sudo python3 practice.py -c
+
+# display stats
+python3 stats.py
 ```
 
 ## Note
-Currently requires root access to run due to using the keyboard module. Will be fixed in a future update.
+Currently requires root access to run due to using the 'keyboard' Python module. Will be fixed in a future update.
