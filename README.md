@@ -9,7 +9,7 @@
 ### Linux
 ```console
 # clone the repo
-$ git clone https://github.com/Dan-Vizor/helldivers-stratagem-practice.git
+$ git clone https://github.com/Dan-Vizor/Helldivers-2-stratagem-practice.git
 
 # change the working directory to stratagem practice
 $ cd helldivers-stratagem-practice
