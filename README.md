@@ -3,7 +3,7 @@
 
 *Notice: failure to achieve at least 80% accuracy will result in you being ejected from the Super Destroyer.*
 
-![stratagem image](https://github.com/Dan-Vizor/helldivers-stratagem-practice/blob/master/Stratagems.png)
+![stratagem image](https://github.com/Dan-Vizor/helldivers-stratagem-practice/blob/master/images/Stratagems.png)
 
 ## Installation
 ### Linux
@@ -45,6 +45,8 @@ python3 stats.py
 
 ### Windows
 Open File Explorer and navagate to where you downloaded this repo. Then open CMD like shown below. 
+![open CMD example image](https://github.com/Dan-Vizor/helldivers-stratagem-practice/blob/master/images/OpenCMD.png)
+
 
 ```console
 # random mode
