@@ -46,4 +46,4 @@ This program uses the default PC keybinds for stratagems. You can set alternate 
 To exit the game press CTRL+C
 
 ## Note
-Currently requires root access to run due to using the 'keyboard' Python module. Will be fixed in a future update.
+Currently requires root access on Linux to run due to using the 'keyboard' Python module. Will be fixed in a future update.

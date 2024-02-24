@@ -43,8 +43,13 @@ def UpdatePlayerData(stratagem:dict, CompletionTime=None, TimesPassed=None, Time
     with open("PlayerData.json", "w") as f: f.write(json.dumps(PlayerData, indent=2))
 
 def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
-    if JustArrows: OutputText = f"{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}\033[1m["
-    else: OutputText = f"{stratagem['name']}:{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}\033[1m["
+    if platform.system() == "Windows":
+        if JustArrows: OutputText = f"{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}"
+        else: OutputText = f"{stratagem['name']}:{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}"
+
+    else:
+        if JustArrows: OutputText = f"{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}\033[1m["
+        else: OutputText = f"{stratagem['name']}:{' '*(DATA['NamesSpacingsize'] - len(stratagem['name']))}\033[1m["
 
     i = 0
     for character in stratagem['code']:
@@ -54,7 +59,7 @@ def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
 
         i += 1
 
-    OutputText += "]\033[0m"
+    if platform.system() != "Windows": OutputText += "]\033[0m"
     return OutputText
 
 def main():
