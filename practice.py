@@ -4,6 +4,7 @@ import sys
 import json
 import time
 import keyboard
+import platform
 import random
 from termcolor import colored
 
@@ -57,7 +58,7 @@ def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
     return OutputText
 
 def main():
-    os.system('clear')
+    if platform.system() == "Linux": os.system('clear')
     CommandArgs = sys.argv[1:]
 
     # print help menu and exit
@@ -146,8 +147,8 @@ def main():
 
 # load json files
 try:
-    SETTINGS = json.loads(open("settings.json", "r").read())
-    DATA = json.loads(open("data.json", "r").read())
+    SETTINGS = json.loads(open("settings.json", "r", encoding="utf-8").read())
+    DATA = json.loads(open("data.json", "r", encoding="utf-8").read())
 
 except Exception as e:
     print(f"Error: failed to load json files:\n{e}")

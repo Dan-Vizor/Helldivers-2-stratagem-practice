@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import os
 import json
+import platform
 from termcolor import colored
 
 def CalculateMean(numbers:list, RoundTo=3):
@@ -32,7 +33,7 @@ if not os.path.exists("PlayerData.json"):
 
 PlayerData = json.loads(open("PlayerData.json", "r").read())
 
-os.system("clear")
+if platform.system() == "Linux": os.system("clear")
 BarChart(
     "Mean time taken (in seconds)",
     [{"name": entry['name'], "value": CalculateMean(entry['Times'])} for entry in PlayerData['stratagems']]

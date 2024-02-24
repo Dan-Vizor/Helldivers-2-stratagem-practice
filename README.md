@@ -10,8 +10,6 @@
 ```console
 # clone the repo
 git clone https://github.com/Dan-Vizor/Helldivers-2-stratagem-practice.git
-
-# change the working directory to stratagem practice
 cd Helldivers-2-stratagem-practice
 
 # install the requirements
@@ -21,10 +19,13 @@ sudo pip3 install -r requirements.txt
 ```
 
 ### Windows
-Install WSL (Windows Subsystem for Linux) using [this guide](https://learn.microsoft.com/en-us/windows/wsl/install), Now Reboot. There will then be an app called 'Ubuntu', open it and then follow the Linux install steps inside WSL.
-
-### MacOS
-Follow [this guide](https://macpaw.com/how-to/install-python-mac) to install Python and then follow the Linux install steps.
+Install python from [here](https://www.microsoft.com/store/productId/9NRWMJP3717K?ocid=pdpshare) as well as git from [here](https://git-scm.com/download/win). Then open windows command line (press start and type 'cmd') and run the following commands
+```console
+cd path\to\where\you\want\to\download\to
+git clone https://github.com/Dan-Vizor/Helldivers-2-stratagem-practice.git
+cd Helldivers-2-stratagem-practice
+pip install -r requirements.txt
+```
 
 ## Usage
 ```console
