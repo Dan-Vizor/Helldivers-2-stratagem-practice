@@ -28,6 +28,7 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+### Linux
 ```console
 # random mode
 sudo python3 practice.py -r
@@ -41,6 +42,24 @@ sudo python3 practice.py -c
 # display stats
 python3 stats.py
 ```
+
+### Windows
+Open File Explorer and navagate to where you downloaded this repo. Then open CMD like shown below. 
+
+```console
+# random mode
+python practice.py -r
+
+# single stratagem mode
+python practice.py -s "Hellbomb"
+
+# reset stats
+python practice.py -c
+
+# display stats
+python stats.py
+```
+
 This program uses the default PC keybinds for stratagems. You can set alternate keybinds by editing the **settings.json** file.
 
 To exit the game press CTRL+C
