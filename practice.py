@@ -114,7 +114,7 @@ def main():
 
         else:
             if CodeIndex >= len(stratagem['code']):
-                print(f"{' '*100}\r {colored(stratagem['name'], 'green')}:{MakeCodeOutput(stratagem, 0, JustArrows=True)}")
+                print(f"{' '*TERMINALWIDTH}\r {colored(stratagem['name'], 'green')}:{MakeCodeOutput(stratagem, 0, JustArrows=True)}")
                 UpdatePlayerData(stratagem, CompletionTime=TimeTaken, TimesPassed=1)
 
                 # reset
@@ -127,7 +127,7 @@ def main():
         TimeTaken = (time.time() - StartTime)
 
         # print code to user
-        print(f"{' '*100}\r {MakeCodeOutput(stratagem, CodeIndex)} {round(TimeTaken, 2)}", end="\r")
+        print(f"{' '*TERMINALWIDTH}\r {MakeCodeOutput(stratagem, CodeIndex)} {round(TimeTaken, 2)}", end="\r")
 
         # check if any keys are being pressed
         CorrectKey = SETTINGS['keybinds'][stratagem['code'][CodeIndex]]
@@ -142,7 +142,7 @@ def main():
                             CodeIndex + 1
 
             else: 
-                print(f"{' '*100}\r {stratagem['name']}:{colored(MakeCodeOutput(stratagem, 0, JustArrows=True), 'red')}", end="\r")
+                print(f"{' '*TERMINALWIDTH}\r {stratagem['name']}:{colored(MakeCodeOutput(stratagem, 0, JustArrows=True), 'red')}", end="\r")
                 UpdatePlayerData(stratagem, TimesFailed=1)
                 CodeIndex = 0
                 time.sleep(0.5)
@@ -154,6 +154,7 @@ def main():
 try:
     SETTINGS = json.loads(open("settings.json", "r", encoding="utf-8").read())
     DATA = json.loads(open("data.json", "r", encoding="utf-8").read())
+    TERMINALWIDTH = os.get_terminal_size().columns - 20
 
 except Exception as e:
     print(f"Error: failed to load json files:\n{e}")
