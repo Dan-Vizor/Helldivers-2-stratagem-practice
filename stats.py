@@ -39,11 +39,13 @@ BarChart(
     [{"name": entry['name'], "value": CalculateMean(entry['Times'])} for entry in PlayerData['stratagems']]
 )
 print("\n")
+"""
 BarChart(
     "Successful Inputs",
     [{"name": entry['name'], "value": entry['TimesPassed']} for entry in PlayerData['stratagems']]
 )
 print("\n")
+"""
 BarChart(
     "Failed Inputs",
     [{"name": entry['name'], "value": entry['TimesFailed']} for entry in PlayerData['stratagems']]
@@ -54,4 +56,4 @@ BarChart(
     [{"name": entry['name'], "value": CalculateRatio(entry['TimesFailed'], entry['TimesPassed'])} for entry in PlayerData['stratagems']]
 )
 
-print("\nto reset these stats please run 'sudo python3 practice.py --clear'")
+print("\nto reset these stats run 'sudo python3 practice.py --clear'")

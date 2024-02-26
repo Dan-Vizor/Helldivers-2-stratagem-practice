@@ -15,6 +15,7 @@ def AnyValidInput():
     return keyboard.is_pressed(SETTINGS['keybinds']['up']) or keyboard.is_pressed(SETTINGS['keybinds']['down']) or keyboard.is_pressed(SETTINGS['keybinds']['left']) or keyboard.is_pressed(SETTINGS['keybinds']['right'])
 
 def UpdatePlayerData(stratagem:dict, CompletionTime=None, TimesPassed=None, TimesFailed=None):
+    if stratagem['name'] == "random": return
     PlayerData = json.loads(open("PlayerData.json", "r").read())
     
     i = 0
@@ -60,6 +61,8 @@ def MakeCodeOutput(stratagem:dict, CodeIndex:int, JustArrows=False):
         i += 1
 
     if platform.system() != "Windows": OutputText += "]\033[0m"
+    else: OutputText += "]"
+
     return OutputText
 
 def main():
@@ -74,6 +77,7 @@ def main():
     # identify which mode to use
     if "-r" in CommandArgs or "--random" in CommandArgs: mode = "random"
     elif "-s" in CommandArgs or "--single" in CommandArgs: mode = "single"
+    elif "-rs" in CommandArgs or "--random-stratagem" in CommandArgs: mode = "random stratagem"
     elif "-c" in CommandArgs or "--clear" in CommandArgs:
         os.remove("PlayerData.json")
         print("player data has been reset")
@@ -109,6 +113,15 @@ def main():
 
                 if not found:
                     print(f"Error: unknown stratagem name '{CommandArgs[-1]}'")
+
+            elif mode == "random stratagem":
+                stratagem = {"name": "random", "code": []}
+                for i in range(random.randint(3, 8)):
+                    stratagem['code'].append(random.choice(["up", "down", "left", "right"]))
+
+            else:
+                print(f"Error: invalid mode '{mode}' used")
+                raise SystemExit
 
             SelectNew = False
 
