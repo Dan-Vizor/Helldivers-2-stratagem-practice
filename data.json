@@ -238,6 +238,10 @@
         {
             "name": "Orbital Illumination Flare",
             "code": ["right", "right", "left", "left"]
+        },
+        {
+            "name": "XO-15 Patriot Exosuit",
+            "code": ["left", "down", "right", "up", "left", "down", "down"]
         }
     ]
 }

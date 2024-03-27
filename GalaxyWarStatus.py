@@ -15,7 +15,7 @@ while True:
 
     I = 0
     while True:
-        if I > 10: raise SystemExit
+        if I > APIQueryReattempts: raise SystemExit
 
         # load data from API
         try:
@@ -41,16 +41,16 @@ while True:
 
     os.system("clear")
 
-    planets = sorted(data['mapNodes'], key=lambda x: x['players'], reverse=True)
+    planets = sorted(data['mn'], key=lambda x: x['p'], reverse=True)
     print("Planet | Liberation | Players | Completion ETA")
     for planet in planets:
-        PlanetName = planet['name']
-        Liberation = round(planet['liberated'], 3)
-        LiberationDelta = round(planet['rate'], 3)
-        PlayerCount = planet['players']
-        ETA = planet['completionTime']
+        PlanetName = planet['n']
+        Liberation = round(planet['l'], 3)
+        LiberationDelta = round(planet['r'], 3)
+        PlayerCount = planet['p']
+        ETA = planet['ct']
 
-        if planet['campaign'] == -1: continue
+        if planet['c'] == -1: continue
 
         if PlayerCount > 60000: PlayerCount = colored("{:,}".format(PlayerCount), "green")
         elif PlayerCount < 60000 and PlayerCount > 20000: PlayerCount = colored("{:,}".format(PlayerCount), "yellow")
