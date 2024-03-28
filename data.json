@@ -242,6 +242,14 @@
         {
             "name": "XO-15 Patriot Exosuit",
             "code": ["left", "down", "right", "up", "left", "down", "down"]
+        },
+        {
+            "name": "Quasar Cannon",
+            "code": ["down", "down", "up", "left", "right"]
+        },
+        {
+            "name": "Heavy Machine Gun",
+            "code": ["down", "left", "up", "down", "down"]
         }
     ]
 }
